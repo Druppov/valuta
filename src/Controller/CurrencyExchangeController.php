@@ -45,56 +45,62 @@ class CurrencyExchangeController extends AbstractController
     {
         $responseMessage = "";
 
+        try {
 
-        $currencyFrom = $request->request->get('from');
-        if (empty($currencyFrom) || $currencyFrom == 'undefined') {
-            $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, "Parameter `from` not found.");
+            $currencyFrom = $request->request->get('from');
+            if (empty($currencyFrom) || $currencyFrom == 'undefined') {
+                $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, "Parameter `from` not found.");
+            }
+
+            $currencyTo = $request->request->get('to');
+            if (empty($currencyTo) || $currencyTo == 'undefined') {
+                $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, "Parameter `to` not found.");
+            }
+
+            $amount = (float)$request->request->get('amount');
+            if ($amount < 0) {
+                $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, "Parameter `amount` must be positive.");
+            }
+
+            if (!empty($responseMessage)) {
+                return $this->json([
+                    'responseMessage' => $responseMessage
+                ]);
+            }
+
+            $toDay = date("Y-m-d");
+
+            $fromCurrency = $entityManager->getRepository(CurrencyRate::class)->findOneBySomeFields(base: $this->base, currentDate: $toDay, currencyCode: $currencyFrom);
+            $toCurrency = $entityManager->getRepository(CurrencyRate::class)->findOneBySomeFields(base: $this->base, currentDate: $toDay, currencyCode: $currencyTo);
+
+            if (!empty($currencyFrom) && !isset($fromCurrency)) {
+                $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, sprintf("%s not supported.", $currencyFrom));
+            }
+            if (!empty($currencyTo) && !isset($toCurrency)) {
+                $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, sprintf("%s not supported.", $currencyTo));
+            }
+
+            if (!empty($responseMessage)) {
+                return $this->json([
+                    'responseMessage' => $responseMessage
+                ]);
+            }
+
+            $targetAmount = ConvertHelper::convert($fromCurrency->getRate(), $toCurrency->getRate(), $amount);
+
+            $data = [
+                'from' => $currencyFrom,
+                'to' => $currencyTo,
+                'amount' => $amount,
+                'targetAmount' => $targetAmount,
+                'responseMessage' => "Convert successfully."
+            ];
+
+            return $this->json($data);
+
+        } catch (\Exception $e) {
+            // обработка исключения, например:
+            return $this->json(['error' => 'An error occurred'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $currencyTo = $request->request->get('to');
-        if (empty($currencyTo) || $currencyTo == 'undefined') {
-            $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, "Parameter `to` not found.");
-        }
-
-        $amount = (float)$request->request->get('amount');
-        if ($amount < 0) {
-            $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, "Parameter `amount` must be positive.");
-        }
-
-        if (!empty($responseMessage)) {
-            return $this->json([
-                'responseMessage' => $responseMessage
-            ]);
-        }
-
-        $toDay = date("Y-m-d");
-
-        $fromCurrency = $entityManager->getRepository(CurrencyRate::class)->findOneBySomeFields(base: $this->base, currentDate: $toDay, currencyCode: $currencyFrom);
-        $toCurrency = $entityManager->getRepository(CurrencyRate::class)->findOneBySomeFields(base: $this->base, currentDate: $toDay, currencyCode: $currencyTo);
-
-        if (!empty($currencyFrom) && !isset($fromCurrency)) {
-            $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, sprintf("%s not supported.", $currencyFrom));
-        }
-        if (!empty($currencyTo) && !isset($toCurrency)) {
-            $responseMessage = ConvertHelper::formatResponseMessage($responseMessage, sprintf("%s not supported.", $currencyTo));
-        }
-
-        if (!empty($responseMessage)) {
-            return $this->json([
-                'responseMessage' => $responseMessage
-            ]);
-        }
-
-        $targetAmount = ConvertHelper::convert($fromCurrency->getRate(), $toCurrency->getRate(), $amount);
-
-        $data = [
-            'from' => $currencyFrom,
-            'to' => $currencyTo,
-            'amount' => $amount,
-            'targetAmount' => $targetAmount,
-            'responseMessage' => "Convert successfully."
-        ];
-
-        return $this->json($data);
     }
 }

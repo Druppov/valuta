@@ -174,3 +174,7 @@ Y
 ,tests/Service/EcbExchangeRateServiceTest.php,7/e/7e845bca50087aeee7a88ccafe2d4dffce72878d
 f
 6tests/Controller/CurrencyExchangeControllerTestOld.php,0/e/0e5bf589766436191dc1aeab72b6489178bf5260
+^
+.vendor/symfony/browser-kit/AbstractBrowser.php,1/d/1d8ee67d66078380b9dc3dba30ca82b9e2a3e3f5
+E
+.phpunit.result.cache,2/d/2d329044c6b41bffeb5f66966b019084792bc4ba
