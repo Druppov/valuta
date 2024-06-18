@@ -4,12 +4,46 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    exchange_rate_service_provider: '%env(EXCHANGE_RATE_SERVICE_PROVIDER)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $client: '@http_client'
+
+    # Определение сервисов
+    App\Service\CbrExchangeRateService:
+        arguments:
+            $client: '@http_client'
+    App\Service\EcbExchangeRateService:
+        arguments:
+            $client: '@http_client'
+
+    # Регистрация фабрики
+    App\Factory\ExchangeRateServiceFactory:
+        arguments:
+            $params: '@parameter_bag'
+            $httpClient: '@http_client'
+
+    # Создание сервиса с помощью фабрики
+    App\Service\ExchangeRateService:
+        factory: [ '@App\Factory\ExchangeRateServiceFactory', 'create' ]
+
+    # App\Service\EcbExchangeRateService: ~
+    # App\Service\CbrExchangeRateService: ~
+
+    # Define alias for ExchangeRateService
+    # App\Service\ExchangeRateService: '@App\Service\CbrExchangeRateService'
+    # App\Service\ExchangeRateService: '@App\Service\EcbExchangeRateService'
+    # App\Service\ExchangeRateService: '@App\Service\%exchange_rate_service_provider%ExchangeRateService'
+
+    App\Command\CrawlerCommand:
+        arguments:
+            $exchangeRateService: '@App\Service\ExchangeRateService'
+        tags: [ 'console.command' ]
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
