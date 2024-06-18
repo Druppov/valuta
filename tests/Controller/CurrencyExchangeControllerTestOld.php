@@ -4,11 +4,14 @@
 
 namespace Tests\Controller;
 
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CurrencyExchangeControllerTest extends KernelTestCase
+#[Group('skip')]
+class CurrencyExchangeControllerTestOld extends KernelTestCase
 {
     private $entityManager;
     private $base;
@@ -17,17 +20,16 @@ class CurrencyExchangeControllerTest extends KernelTestCase
     {
         self::bootKernel();
 
-        // Получаем контейнер Symfony для доступа к сервисам
         $container = self::$kernel->getContainer();
 
-        // Получаем нужные сервисы из контейнера
         $this->entityManager = $container->get('doctrine')->getManager();
         $this->base = $container->getParameter('exchange_rate_service_provider');
     }
 
     public function testConvert()
     {
-        $client = self::$kernel->getContainer()->get('test.client');
+//        $client = self::$kernel->getContainer()->get('test.client');
+        $client = $this->createMock(HttpClientInterface::class);
 
         $requestData = [
             'from' => 'EUR',

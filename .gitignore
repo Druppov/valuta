@@ -1,3 +1,5 @@
+.idea
+*.iml
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -6,10 +8,4 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
-/vendor/
 ###< symfony/framework-bundle ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###

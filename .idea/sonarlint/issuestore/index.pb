@@ -27,8 +27,6 @@ V
 D
 config/services.yaml,8/7/87042d1f46b57381244d70e7a42feeb7710727dc
 K
-src/Entity/CurrencyCode.php,b/b/bb83999362b73ce1b2e43af5720b16a6cd2df532
-K
 src/Entity/CurrencyRate.php,b/3/b35d8c5487ffa37d200e1f0ac0409e18fa0d3476
 Y
 )src/Repository/CurrencyRateRepository.php,6/0/60fa92967d75b34b0363865f1fe7841766260329
@@ -44,8 +42,6 @@ M
 src/Service/ConvertHelper.php,a/4/a414fb8665a7b38bfe7ac5c74f11957e97a6f189
 Z
 *src/Factory/ExchangeRateServiceFactory.php,a/5/a593b976006371f9bbbb98192e428c202c7c1636
-F
-tests/phpunit.xml.dist,d/7/d738afd7d1674a114cc1447b241a477e1b542957
 C
 tests/bootstrap.php,3/2/326979242ce2c18a934ad123c59abf3a9753ba46
 T
@@ -56,10 +52,6 @@ c
 src/Kernel.php,a/5/a5d5cc43c07908e1476c934e4d03e47d43fb4fc3
 9
 	.env.test,c/5/c589161bbc055e8f5fc7ed13aae8551821ece4b6
-Y
-)src/Repository/CurrencyCodeRepository.php,1/4/14ad03fd21a069dad431c91e741e088f97cf05df
-T
-$migrations/Version20240618174858.php,5/7/579ca16c47e28c7da9e68d37132f5d88a6c4dbca
 ]
 -.idea/sonarlint/securityhotspotstore/index.pb,8/8/88a9255124c95bdc913197c120a8d560edc59c8e
 L
@@ -170,3 +162,15 @@ w
 G.idea/sonarlint/issuestore/c/8/c8627ee515184e86812fb1311bef61a64d2f9719,9/d/9d3d6d2b35dd4e500ca25f26379bc9ed26d374d5
 w
 G.idea/sonarlint/issuestore/5/7/579ca16c47e28c7da9e68d37132f5d88a6c4dbca,d/7/d767eaa3f9897eb2611d2e819fa2c989489fdfe1
+;
+phpunit.xml,3/5/357499abc6fdfbad45ccc062a427f5f62fb2e3cd
+T
+$tests/Helpers/KernelTestCaseUnit.php,4/d/4d6b8ea4953d8ce36b1c74bf7c7b3c95f8f17edd
+Y
+)tests/Service/ExchangeRateServiceTest.php,d/e/de8e96d72b4a04e258715e06e2416cc71eb35ba7
+\
+,tests/Service/CbrExchangeRateServiceTest.php,8/7/873b3c04df8cbc035eac4f0ec60de1e6f86aad21
+\
+,tests/Service/EcbExchangeRateServiceTest.php,7/e/7e845bca50087aeee7a88ccafe2d4dffce72878d
+f
+6tests/Controller/CurrencyExchangeControllerTestOld.php,0/e/0e5bf589766436191dc1aeab72b6489178bf5260
